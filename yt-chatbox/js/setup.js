@@ -16,6 +16,8 @@
     shadowColor: document.getElementById('shadowColor'),
     shadowBlur: document.getElementById('shadowBlur'),
     shadowBlurOut: document.getElementById('shadowBlur-out'),
+    animation: document.getElementById('animation'),
+    align: document.getElementById('align'),
     duration: document.getElementById('duration'),
     durationOut: document.getElementById('duration-out'),
     max: document.getElementById('max'),
@@ -47,6 +49,8 @@
     p.set('shadow', els.shadow.checked ? 'true' : 'false');
     p.set('shadowColor', els.shadowColor.value);
     p.set('shadowBlur', els.shadowBlur.value);
+    p.set('animation', els.animation.value);
+    p.set('align', els.align.value);
     p.set('duration', els.duration.value);
     p.set('max', els.max.value);
     return p;
@@ -73,7 +77,7 @@
     els.strokeWidthOut.textContent = `${params.get('strokeWidth')}px`;
     els.shadowBlurOut.textContent = `${params.get('shadowBlur')}px`;
     els.durationOut.textContent = params.get('duration') === '0' ? 'never' : `${Math.round(params.get('duration') / 1000)}s`;
-    els.maxOut.textContent = params.get('max');
+    els.maxOut.textContent = params.get('max') === '0' ? 'unlimited' : params.get('max');
 
     if (hasChannel()) {
       els.tally.classList.add('tally--live');
@@ -109,6 +113,8 @@
     els.shadow,
     els.shadowColor,
     els.shadowBlur,
+    els.animation,
+    els.align,
     els.duration,
     els.max,
   ].forEach((el) => el.addEventListener('input', () => scheduleRefresh(STYLE_DEBOUNCE_MS)));

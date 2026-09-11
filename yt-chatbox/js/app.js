@@ -16,12 +16,21 @@
     shadowOn ? `0 1px ${shadowBlur}px ${shadowColor}, 0 0 ${Math.round(shadowBlur / 2)}px ${shadowColor}` : 'none'
   );
 
+  // Horizontal position of the whole chat block within the browser source.
+  const alignMap = { left: 'flex-start', middle: 'center', right: 'flex-end' };
+  document.body.style.justifyContent = alignMap[params.get('align')] || 'flex-start';
+
+  const validAnimations = ['fade', 'left', 'right', 'bottom'];
+  const animation = validAnimations.includes(params.get('animation')) ? params.get('animation') : 'fade';
+
   // --- behavior params ---
+  // Defaults: messages never disappear (max=0 -> unlimited, duration=0 -> never fades).
   Overlay.init({
-    maxMessages: Number(params.get('max')) || 40,
-    fadeAfterMs: params.has('duration') ? Number(params.get('duration')) : 20000,
+    maxMessages: Number(params.get('max')) || 0,
+    fadeAfterMs: params.has('duration') ? Number(params.get('duration')) : 0,
     userColorMode: params.get('userColorMode') === 'fixed' ? 'fixed' : 'random',
     fixedUserColor: params.get('userColor') || '#ffffff',
+    animation,
   });
 
   const handle = params.get('youtube');

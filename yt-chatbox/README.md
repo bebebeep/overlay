@@ -58,8 +58,13 @@ Query parameters, if you want to edit the URL by hand:
 | `shadow` | `true`/`false` | `true` |
 | `shadowColor` | hex | `#000000` |
 | `shadowBlur` | px | `4` |
-| `duration` | ms before a message fades out, `0` = never | `20000` |
-| `max` | max messages kept on screen | `40` |
+| `animation` | `fade`, `left`, `right`, or `bottom` | `fade` |
+| `align` | `left`, `middle`, or `right` | `left` |
+| `duration` | ms before a message fades out, `0` = never | `0` (never) |
+| `max` | max messages kept on screen, `0` = unlimited | `0` (unlimited) |
+
+By default, messages never disappear and there's no cap on how many stay on
+screen — set `duration`/`max` if you'd rather they clear out over time.
 
 ## Why it needs an API key, and what that means for quota
 

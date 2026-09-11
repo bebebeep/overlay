@@ -2,10 +2,11 @@
 const Overlay = (() => {
   const state = {
     container: null,
-    maxMessages: 40,
-    fadeAfterMs: 20000,
+    maxMessages: 0, // 0 = unlimited, messages never get trimmed
+    fadeAfterMs: 0, // 0 = never fade out
     userColorMode: 'random', // 'random' | 'fixed'
     fixedUserColor: '#ffffff',
+    animation: 'fade', // 'fade' | 'left' | 'right' | 'bottom'
   };
 
   function init(opts = {}) {
@@ -31,7 +32,7 @@ const Overlay = (() => {
     if (!state.container) return;
 
     const row = document.createElement('div');
-    row.className = 'msg';
+    row.className = `msg msg--anim-${state.animation}`;
     row.style.setProperty('--user-color', colorForUser(username));
 
     row.innerHTML = `<span class="msg__user">${escapeHtml(username)}</span><span class="msg__sep">:</span><span class="msg__text">${escapeHtml(text)}</span>`;
@@ -58,13 +59,14 @@ const Overlay = (() => {
   }
 
   function trimOldMessages() {
+    if (!state.maxMessages || state.maxMessages <= 0) return; // unlimited
     // IMPORTANT: state.container.children is a *live* collection, and
     // removeMessage() doesn't remove the element immediately - it waits for
     // the fade-out transition to finish. A while-loop re-checking
     // rows.length here would spin forever re-targeting the same
     // not-yet-removed element the instant the count goes over the limit -
-    // that was the cause of the freeze. Snapshotting the list up front and
-    // removing a fixed number of elements avoids that entirely.
+    // that was the cause of an earlier freeze. Snapshotting the list up
+    // front and removing a fixed number of elements avoids that entirely.
     const rows = Array.from(state.container.children);
     const excess = rows.length - state.maxMessages;
     for (let i = 0; i < excess; i++) {

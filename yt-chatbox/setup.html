@@ -85,20 +85,45 @@
       </div>
 
       <div class="panel">
+        <p class="panel__label">Motion &amp; Layout</p>
+
+        <div class="jack">
+          <span class="jack__label">Entrance animation</span>
+          <select id="animation">
+            <option value="fade">Fade in</option>
+            <option value="left">Slide in from left</option>
+            <option value="right">Slide in from right</option>
+            <option value="bottom">Slide in from bottom</option>
+          </select>
+        </div>
+
+        <div class="jack">
+          <span class="jack__label">Alignment</span>
+          <select id="align">
+            <option value="left">Left</option>
+            <option value="middle">Middle</option>
+            <option value="right">Right</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="panel">
         <p class="panel__label">Behaviour</p>
         <div class="jack">
           <span class="jack__label">Message lifetime</span>
           <div class="range-row">
-            <input type="range" id="duration" min="0" max="60000" step="1000" value="20000" />
-            <output id="duration-out">20s</output>
+            <input type="range" id="duration" min="0" max="60000" step="1000" value="0" />
+            <output id="duration-out">never</output>
           </div>
+          <div class="jack__hint">Default is "never" — messages stay on screen for good. Drag right if you want them to fade out after a while instead.</div>
         </div>
         <div class="jack">
           <span class="jack__label">Max on screen</span>
           <div class="range-row">
-            <input type="range" id="max" min="5" max="80" step="5" value="40" />
-            <output id="max-out">40</output>
+            <input type="range" id="max" min="0" max="200" step="10" value="0" />
+            <output id="max-out">unlimited</output>
           </div>
+          <div class="jack__hint">Default is unlimited. Only set a limit if a very long stream starts to feel sluggish.</div>
         </div>
       </div>
     </div>
