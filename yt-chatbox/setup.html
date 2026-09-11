@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>YouTube Chatbox Patch Bay</title>
+<link rel="stylesheet" href="assets/setup.css" />
+</head>
+<body>
+<div class="rack">
+  <div class="rack__header">
+    <h1 class="rack__title">YouTube Chatbox <span>Patch Bay</span></h1>
+    <div class="rack__subtitle">BUILD → PREVIEW → PATCH INTO OBS</div>
+  </div>
+
+  <div class="console">
+    <!-- LEFT: inputs -->
+    <div>
+      <div class="panel">
+        <p class="panel__label">Channel</p>
+        <div class="jack">
+          <div class="jack__row">
+            <span class="jack__badge jack__badge--youtube">YT</span>
+            <span class="jack__label">YouTube</span>
+          </div>
+          <input type="text" id="youtube" placeholder="@handle" autocomplete="off" />
+          <input type="password" id="ytkey" placeholder="YouTube Data API key" autocomplete="off" style="margin-top: 8px" />
+          <div class="jack__hint">
+            Needs a free key — get one in
+            <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener">Google Cloud Console</a>
+            after enabling "YouTube Data API v3".
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <p class="panel__label">Text</p>
+
+        <div class="jack">
+          <span class="jack__label">Font size</span>
+          <div class="range-row">
+            <input type="range" id="fontSize" min="14" max="42" step="1" value="22" />
+            <output id="fontSize-out">22px</output>
+          </div>
+        </div>
+
+        <div class="jack">
+          <span class="jack__label">Stroke width</span>
+          <div class="range-row">
+            <input type="range" id="strokeWidth" min="0" max="4" step="0.5" value="0" />
+            <output id="strokeWidth-out">0px</output>
+          </div>
+          <div class="color-row">
+            <input type="color" id="strokeColor" value="#000000" />
+            <span>Stroke colour</span>
+          </div>
+        </div>
+
+        <div class="jack">
+          <span class="jack__label">Username colour</span>
+          <select id="userColorMode">
+            <option value="random">Random per user</option>
+            <option value="fixed">Single colour</option>
+          </select>
+          <div class="color-row sub-controls" id="userColor-wrap" hidden>
+            <input type="color" id="userColor" value="#ffffff" />
+            <span>Username colour</span>
+          </div>
+        </div>
+
+        <div class="jack toggle-row">
+          <label for="shadow">Text shadow</label>
+          <input type="checkbox" id="shadow" checked />
+        </div>
+        <div class="sub-controls" id="shadow-controls">
+          <div class="color-row">
+            <input type="color" id="shadowColor" value="#000000" />
+            <span>Shadow colour</span>
+          </div>
+          <div class="range-row" style="margin-top: 10px;">
+            <input type="range" id="shadowBlur" min="0" max="12" step="1" value="4" />
+            <output id="shadowBlur-out">4px</output>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <p class="panel__label">Behaviour</p>
+        <div class="jack">
+          <span class="jack__label">Message lifetime</span>
+          <div class="range-row">
+            <input type="range" id="duration" min="0" max="60000" step="1000" value="20000" />
+            <output id="duration-out">20s</output>
+          </div>
+        </div>
+        <div class="jack">
+          <span class="jack__label">Max on screen</span>
+          <div class="range-row">
+            <input type="range" id="max" min="5" max="80" step="5" value="40" />
+            <output id="max-out">40</output>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: preview + output -->
+    <div>
+      <div class="panel">
+        <p class="panel__label">Live Preview</p>
+        <div class="monitor">
+          <div class="monitor__frame">
+            <div class="tally" id="tally"><span class="tally__dot"></span><span id="tally-text">STANDBY</span></div>
+            <iframe id="preview" src="index.html?demo=1"></iframe>
+          </div>
+        </div>
+
+        <div class="readout">
+          <div class="readout__row">
+            <input type="text" id="output-url" readonly />
+            <button class="btn btn--primary" id="copy-btn">Copy</button>
+            <button class="btn" id="open-btn">Open</button>
+          </div>
+          <div class="readout__note">
+            Paste into OBS → Sources → Add → Browser Source, sized to match your canvas.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/setup.js"></script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+:root {
+  --font-size: 22px;
+  --stroke-width: 0px;
+  --stroke-color: #000000;
+  --text-shadow: none;
+  --text-primary: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: transparent; /* required for OBS browser source */
+  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+  color: var(--text-primary);
+  overflow: hidden;
+}
+
+#chat-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px;
+  width: 480px;
+  max-width: 100vw;
+}
+
+.msg {
+  font-size: var(--font-size);
+  line-height: 1.3;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 220ms ease-out, transform 220ms ease-out;
+  word-break: break-word;
+  /* text stroke via -webkit-text-stroke, supported in the Chromium engine
+     OBS/Chrome use; paint-order keeps the stroke behind the fill color */
+  -webkit-text-stroke: var(--stroke-width) var(--stroke-color);
+  paint-order: stroke fill;
+  text-shadow: var(--text-shadow);
+}
+
+.msg--in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.msg--out {
+  opacity: 0;
+  transform: translateY(-4px);
+}
+
+.msg__user {
+  font-weight: 700;
+  color: var(--user-color, var(--text-primary));
+}
+
+.msg__sep {
+  margin-right: 0.35em;
+}
+
+.msg__text {
+  color: var(--text-primary);
+}
+
+#status-line {
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  font-size: 12px;
+  font-family: -apple-system, sans-serif;
+  color: rgba(255, 255, 255, 0.6);
+  background: rgba(0, 0, 0, 0.45);
+  padding: 4px 8px;
+  border-radius: 6px;
+  opacity: 0;
+  -webkit-text-stroke: 0; /* status line never uses the stroke setting */
+  transition: opacity 300ms ease;
+  pointer-events: none;
+}
+
+#status-line.visible {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .msg {
+    transition: none;
+  }
+}
