@@ -31,6 +31,7 @@
   if (demo) {
     runDemo();
   } else if (handle && apiKey) {
+    Overlay.status(`YouTube: connecting to ${handle}...`);
     connectYouTubeChat(handle, apiKey, Overlay.push);
   } else {
     Overlay.status('Missing channel or API key — open setup.html.');

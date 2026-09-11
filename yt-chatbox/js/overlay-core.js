@@ -47,14 +47,29 @@ const Overlay = (() => {
   }
 
   function removeMessage(row) {
-    if (!row || !row.parentNode) return;
+    if (!row || !row.parentNode || row.dataset.removing) return;
+    row.dataset.removing = 'true';
     row.classList.add('msg--out');
     row.addEventListener('transitionend', () => row.remove(), { once: true });
+    // Safety net: if transitionend never fires for any reason (e.g. the
+    // prefers-reduced-motion media query disables the transition entirely),
+    // force removal anyway so the element can't linger in the DOM forever.
+    setTimeout(() => row.remove(), 400);
   }
 
   function trimOldMessages() {
-    const rows = state.container.children;
-    while (rows.length > state.maxMessages) removeMessage(rows[0]);
+    // IMPORTANT: state.container.children is a *live* collection, and
+    // removeMessage() doesn't remove the element immediately - it waits for
+    // the fade-out transition to finish. A while-loop re-checking
+    // rows.length here would spin forever re-targeting the same
+    // not-yet-removed element the instant the count goes over the limit -
+    // that was the cause of the freeze. Snapshotting the list up front and
+    // removing a fixed number of elements avoids that entirely.
+    const rows = Array.from(state.container.children);
+    const excess = rows.length - state.maxMessages;
+    for (let i = 0; i < excess; i++) {
+      removeMessage(rows[i]);
+    }
   }
 
   function status(text) {
@@ -67,7 +82,14 @@ const Overlay = (() => {
     el.textContent = text;
     el.classList.add('visible');
     clearTimeout(status._t);
-    status._t = setTimeout(() => el.classList.remove('visible'), 4000);
+
+    // "Connected" messages are good news - fade them after a few seconds.
+    // Anything else (waiting, retrying, errors) stays on screen until the
+    // next status update, so a stuck connection is always visible instead
+    // of silently disappearing and looking like nothing is happening.
+    if (/connected/i.test(text)) {
+      status._t = setTimeout(() => el.classList.remove('visible'), 4000);
+    }
   }
 
   return { init, push, status };
